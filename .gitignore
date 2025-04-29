@@ -1,0 +1,51 @@
+# Build results
+bin/
+obj/
+out/
+
+# User-specific files
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+# Publish output
+wwwroot/
+
+# Entity Framework
+Migrations/
+
+# Docker files
+*.dockerfile
+docker-compose.*
+
+# Logs
+*.log
+
+# Secrets (be careful!)
+secrets.json
+appsettings.Development.json
+
+# Visual Studio Code settings
+.vscode/
+
+*.sql
+
+
+# Coverage
+coverage/
+*.lcov
+TestResults/
+
+
+# Ignore personal settings
+*.env
+.env.*
