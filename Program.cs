@@ -1,12 +1,9 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using ApexLawFirm.API.Data;
 using Microsoft.EntityFrameworkCore;
 using DotNetEnv;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 Env.Load();
@@ -29,6 +26,28 @@ builder.WebHost.ConfigureKestrel(serverOptions =>{
 builder.Services.AddDbContext<ApexLawFirmDbContext>(options =>
     options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 31))));
 
+builder.Services.AddSwaggerGen(options =>{
+  options.SwaggerDoc("v1", new OpenApiInfo { Title = "ApexLawFirm API", Version = "v1" });
+  options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme{
+    Name = "Authorization",
+    Type = SecuritySchemeType.Http,
+    Scheme = "Bearer",
+    BearerFormat = "JWT",
+    In = ParameterLocation.Header,
+    Description = "Enter your JWT token in this format: Bearer {your token}"
+  });
+
+  options.AddSecurityRequirement(new OpenApiSecurityRequirement{{
+    new OpenApiSecurityScheme{
+      Reference = new OpenApiReference{
+        Type = ReferenceType.SecurityScheme,
+        Id = "Bearer"
+      }
+    },
+    Array.Empty<string>()
+  }});
+});
+
 builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>{
   options.TokenValidationParameters = new TokenValidationParameters{
     ValidateIssuer = true,
@@ -47,10 +66,10 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope()){
   var dbContext = scope.ServiceProvider.GetRequiredService<ApexLawFirmDbContext>();
   if(dbContext.Database.CanConnect()){
-    Console.WriteLine("✅ Database connection successful!");
+    Console.WriteLine("Database connection successful!");
   }
   else{
-    Console.WriteLine("❌ Failed to connect to the database.");
+    Console.WriteLine("Failed to connect to the database.");
   }
 }
 
@@ -59,10 +78,6 @@ if(app.Environment.IsDevelopment()){
     app.UseSwaggerUI();
     app.UseHttpsRedirection();
 }
-
-app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/admin"), appBuilder => {
-    appBuilder.UseMiddleware<RoleRequirementMiddleware>("Admin");
-});
 
 app.UseAuthentication();
 app.UseAuthorization();

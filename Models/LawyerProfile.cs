@@ -1,4 +1,6 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using ApexLawFirm.API.DTOs;
 
 namespace ApexLawFirm.API.Models{
   public class LawyerProfile{

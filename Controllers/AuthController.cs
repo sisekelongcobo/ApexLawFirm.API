@@ -24,7 +24,7 @@ namespace ApexLawFirm.API.Controllers{
     }
 
     [HttpPost("register")]
-    public async Task<IActionResult> Register(AuthRequest request){
+    public async Task<IActionResult> Register(RegisterAuthRequest request){
       if(await _context.Users.AnyAsync(u => u.Email == request.Email))
         return BadRequest("Email already registered.");
 
@@ -48,7 +48,7 @@ namespace ApexLawFirm.API.Controllers{
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<AuthResponse>> Login(AuthRequest request){
+    public async Task<ActionResult<LoginAuthResponse>> Login(LoginAuthRequest request){
       var user = await _context.Users
         .Include(u => u.Role)
         .FirstOrDefaultAsync(u => u.Email == request.Email);
@@ -76,7 +76,7 @@ namespace ApexLawFirm.API.Controllers{
         signingCredentials: creds
       );
 
-      return Ok(new AuthResponse{
+      return Ok(new LoginAuthResponse{
         Token = new JwtSecurityTokenHandler().WriteToken(token),
         Role = user.Role?.Name ?? "User"
       });
