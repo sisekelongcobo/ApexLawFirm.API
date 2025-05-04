@@ -61,6 +61,14 @@ builder.Services.AddAuthentication("Bearer").AddJwtBearer("Bearer", options =>{
 });
 builder.Services.AddAuthorization();
 
+builder.Services.AddCors(options =>{
+  options.AddPolicy("AllowSpecificOrigins", builder =>{
+    builder.WithOrigins(Env.GetString("CLIENT_URL")!)
+           .AllowAnyMethod()
+           .AllowAnyHeader();
+  });
+});
+
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope()){
@@ -81,6 +89,7 @@ if(app.Environment.IsDevelopment()){
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseCors("AllowSpecificOrigins");
 
 app.MapControllers();
 
