@@ -17,6 +17,9 @@ namespace ApexLawFirm.API.Data{
     protected override void OnModelCreating(ModelBuilder modelBuilder){
       base.OnModelCreating(modelBuilder);
 
+      modelBuilder.Entity<LawyerProfile>()
+        .ToTable("LawyerProfiles");
+
       modelBuilder.Entity<LawyerSpecialization>()
         .HasKey(ls => new { ls.LawyerId, ls.SpecializationId });
 
