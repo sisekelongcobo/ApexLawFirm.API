@@ -24,7 +24,8 @@ builder.WebHost.ConfigureKestrel(serverOptions =>{
     serverOptions.ListenAnyIP(int.Parse(port));
 });
 builder.Services.AddDbContext<ApexLawFirmDbContext>(options =>
-    options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 31))));
+    options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 31))
+    .UseSnakeCaseNamingConvention()));
 
 builder.Services.AddSwaggerGen(options =>{
   options.SwaggerDoc("v1", new OpenApiInfo { Title = "ApexLawFirm API", Version = "v1" });
