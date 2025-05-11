@@ -1,6 +1,4 @@
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using ApexLawFirm.API.DTOs;
 
 namespace ApexLawFirm.API.Models{
   public class LawyerProfile {
@@ -11,12 +9,13 @@ namespace ApexLawFirm.API.Models{
     public string RegistrationNumber { get; set; } = null!;
     public int YearsExperience { get; set; }
     public string ProfilePhoto { get; set; } = null!;
-    public string? Education { get; set; }       // <-- Add this
-    public string? Languages { get; set; }       // <-- Add this
+    public string? Education { get; set; }
+    public string? Languages { get; set; }
 
     public User User { get; set; } = null!;
     public ICollection<LawyerSpecialization> LawyerSpecializations { get; set; } = new List<LawyerSpecialization>();
     [JsonIgnore]
     public ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+    public ICollection<Review> Reviews { get; set; } = new List<Review>();
   }
 }

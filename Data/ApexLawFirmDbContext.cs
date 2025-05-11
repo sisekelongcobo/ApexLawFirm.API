@@ -46,7 +46,7 @@ namespace ApexLawFirm.API.Data{
       
       modelBuilder.Entity<Review>()
         .HasOne(r => r.LawyerProfile)
-        .WithMany()
+        .WithMany(lp => lp.Reviews)
         .HasForeignKey(r => r.LawyerId)
         .OnDelete(DeleteBehavior.Restrict); 
       

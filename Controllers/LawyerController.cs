@@ -25,6 +25,7 @@ namespace ApexLawFirm.API.Controllers{
           .ThenInclude(u => u.Role)
         .Include(lp => lp.LawyerSpecializations)
           .ThenInclude(ls => ls.Specialization)
+        .Include(lp => lp.Reviews)
         .AsQueryable();
 
       if(specializationId.HasValue){
@@ -33,7 +34,7 @@ namespace ApexLawFirm.API.Controllers{
       }
 
       var lawyers = await query.ToListAsync();
-      var dtoList = lawyers.Select(lp => lp.ToLawyerProfileDto());
+      var dtoList = lawyers.Select(lp => lp.ToLawyerProfileResponseDto());
 
       return Ok(new { message = "Lawyers retrieved successfully.", data = dtoList });
     }
@@ -51,7 +52,7 @@ namespace ApexLawFirm.API.Controllers{
       if(lawyer == null)
         return NotFound(new { message = "Lawyer not found." });
 
-      return Ok(new { message = "Lawyer retrieved successfully.", data = lawyer.ToLawyerProfileDto() });
+      return Ok(new { message = "Lawyer retrieved successfully.", data = lawyer.ToLawyerProfileResponseDto() });
     }
 
     // POST: /api/lawyers
@@ -77,7 +78,7 @@ namespace ApexLawFirm.API.Controllers{
           .ThenInclude(ls => ls.Specialization)
         .FirstOrDefaultAsync(lp => lp.Id == profile.Id);
 
-      return Ok(new { message = "Lawyer profile created successfully.", data = created!.ToLawyerProfileDto() });
+      return Ok(new { message = "Lawyer profile created successfully.", data = created!.ToLawyerProfileResponseDto() });
     }
 
     // PUT: /api/lawyers/{id}

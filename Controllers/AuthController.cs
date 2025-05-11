@@ -44,7 +44,7 @@ namespace ApexLawFirm.API.Controllers{
       _context.Users.Add(user);
       await _context.SaveChangesAsync();
 
-      return Ok("User registered.");
+      return Ok(new { Message = "User registered successfully." });
     }
 
     [HttpPost("login")]
